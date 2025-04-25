@@ -1,0 +1,1461 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Miguel's Math Grade Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f0f4f8;
+        }
+
+        .good-grade {
+            background-color: #d1fae5;
+            border-left: 4px solid #10b981;
+        }
+
+        .average-grade {
+            background-color: #fef3c7;
+            border-left: 4px solid #f59e0b;
+        }
+
+        .bad-grade {
+            background-color: #fee2e2;
+            border-left: 4px solid #ef4444;
+        }
+
+        .missing-grade {
+            background-color: #e5e7eb;
+            border-left: 4px solid #6b7280;
+        }
+
+        .progress-container {
+            height: 24px;
+            background-color: #e5e7eb;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            border-radius: 12px;
+            transition: width 1s ease-in-out;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .checkbox-container {
+            display: flex;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .checkbox-container input[type="checkbox"] {
+            margin-right: 10px;
+            width: 18px;
+            height: 18px;
+        }
+
+        .completed {
+            text-decoration: line-through;
+            color: #6b7280;
+        }
+    </style>
+    <style>
+        *,
+        ::before,
+        ::after {
+            --tw-border-spacing-x: 0;
+            --tw-border-spacing-y: 0;
+            --tw-translate-x: 0;
+            --tw-translate-y: 0;
+            --tw-rotate: 0;
+            --tw-skew-x: 0;
+            --tw-skew-y: 0;
+            --tw-scale-x: 1;
+            --tw-scale-y: 1;
+            --tw-pan-x: ;
+            --tw-pan-y: ;
+            --tw-pinch-zoom: ;
+            --tw-scroll-snap-strictness: proximity;
+            --tw-gradient-from-position: ;
+            --tw-gradient-via-position: ;
+            --tw-gradient-to-position: ;
+            --tw-ordinal: ;
+            --tw-slashed-zero: ;
+            --tw-numeric-figure: ;
+            --tw-numeric-spacing: ;
+            --tw-numeric-fraction: ;
+            --tw-ring-inset: ;
+            --tw-ring-offset-width: 0px;
+            --tw-ring-offset-color: #fff;
+            --tw-ring-color: rgb(59 130 246 / 0.5);
+            --tw-ring-offset-shadow: 0 0 #0000;
+            --tw-ring-shadow: 0 0 #0000;
+            --tw-shadow: 0 0 #0000;
+            --tw-shadow-colored: 0 0 #0000;
+            --tw-blur: ;
+            --tw-brightness: ;
+            --tw-contrast: ;
+            --tw-grayscale: ;
+            --tw-hue-rotate: ;
+            --tw-invert: ;
+            --tw-saturate: ;
+            --tw-sepia: ;
+            --tw-drop-shadow: ;
+            --tw-backdrop-blur: ;
+            --tw-backdrop-brightness: ;
+            --tw-backdrop-contrast: ;
+            --tw-backdrop-grayscale: ;
+            --tw-backdrop-hue-rotate: ;
+            --tw-backdrop-invert: ;
+            --tw-backdrop-opacity: ;
+            --tw-backdrop-saturate: ;
+            --tw-backdrop-sepia: ;
+            --tw-contain-size: ;
+            --tw-contain-layout: ;
+            --tw-contain-paint: ;
+            --tw-contain-style:
+        }
+
+        ::backdrop {
+            --tw-border-spacing-x: 0;
+            --tw-border-spacing-y: 0;
+            --tw-translate-x: 0;
+            --tw-translate-y: 0;
+            --tw-rotate: 0;
+            --tw-skew-x: 0;
+            --tw-skew-y: 0;
+            --tw-scale-x: 1;
+            --tw-scale-y: 1;
+            --tw-pan-x: ;
+            --tw-pan-y: ;
+            --tw-pinch-zoom: ;
+            --tw-scroll-snap-strictness: proximity;
+            --tw-gradient-from-position: ;
+            --tw-gradient-via-position: ;
+            --tw-gradient-to-position: ;
+            --tw-ordinal: ;
+            --tw-slashed-zero: ;
+            --tw-numeric-figure: ;
+            --tw-numeric-spacing: ;
+            --tw-numeric-fraction: ;
+            --tw-ring-inset: ;
+            --tw-ring-offset-width: 0px;
+            --tw-ring-offset-color: #fff;
+            --tw-ring-color: rgb(59 130 246 / 0.5);
+            --tw-ring-offset-shadow: 0 0 #0000;
+            --tw-ring-shadow: 0 0 #0000;
+            --tw-shadow: 0 0 #0000;
+            --tw-shadow-colored: 0 0 #0000;
+            --tw-blur: ;
+            --tw-brightness: ;
+            --tw-contrast: ;
+            --tw-grayscale: ;
+            --tw-hue-rotate: ;
+            --tw-invert: ;
+            --tw-saturate: ;
+            --tw-sepia: ;
+            --tw-drop-shadow: ;
+            --tw-backdrop-blur: ;
+            --tw-backdrop-brightness: ;
+            --tw-backdrop-contrast: ;
+            --tw-backdrop-grayscale: ;
+            --tw-backdrop-hue-rotate: ;
+            --tw-backdrop-invert: ;
+            --tw-backdrop-opacity: ;
+            --tw-backdrop-saturate: ;
+            --tw-backdrop-sepia: ;
+            --tw-contain-size: ;
+            --tw-contain-layout: ;
+            --tw-contain-paint: ;
+            --tw-contain-style:
+        }
+
+        /* ! tailwindcss v3.4.16 | MIT License | https://tailwindcss.com */
+        *,
+        ::after,
+        ::before {
+            box-sizing: border-box;
+            border-width: 0;
+            border-style: solid;
+            border-color: #e5e7eb
+        }
+
+        ::after,
+        ::before {
+            --tw-content: ''
+        }
+
+        :host,
+        html {
+            line-height: 1.5;
+            -webkit-text-size-adjust: 100%;
+            -moz-tab-size: 4;
+            tab-size: 4;
+            font-family: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+            font-feature-settings: normal;
+            font-variation-settings: normal;
+            -webkit-tap-highlight-color: transparent
+        }
+
+        body {
+            margin: 0;
+            line-height: inherit
+        }
+
+        hr {
+            height: 0;
+            color: inherit;
+            border-top-width: 1px
+        }
+
+        abbr:where([title]) {
+            -webkit-text-decoration: underline dotted;
+            text-decoration: underline dotted
+        }
+
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
+            font-size: inherit;
+            font-weight: inherit
+        }
+
+        a {
+            color: inherit;
+            text-decoration: inherit
+        }
+
+        b,
+        strong {
+            font-weight: bolder
+        }
+
+        code,
+        kbd,
+        pre,
+        samp {
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+            font-feature-settings: normal;
+            font-variation-settings: normal;
+            font-size: 1em
+        }
+
+        small {
+            font-size: 80%
+        }
+
+        sub,
+        sup {
+            font-size: 75%;
+            line-height: 0;
+            position: relative;
+            vertical-align: baseline
+        }
+
+        sub {
+            bottom: -.25em
+        }
+
+        sup {
+            top: -.5em
+        }
+
+        table {
+            text-indent: 0;
+            border-color: inherit;
+            border-collapse: collapse
+        }
+
+        button,
+        input,
+        optgroup,
+        select,
+        textarea {
+            font-family: inherit;
+            font-feature-settings: inherit;
+            font-variation-settings: inherit;
+            font-size: 100%;
+            font-weight: inherit;
+            line-height: inherit;
+            letter-spacing: inherit;
+            color: inherit;
+            margin: 0;
+            padding: 0
+        }
+
+        button,
+        select {
+            text-transform: none
+        }
+
+        button,
+        input:where([type=button]),
+        input:where([type=reset]),
+        input:where([type=submit]) {
+            -webkit-appearance: button;
+            background-color: transparent;
+            background-image: none
+        }
+
+        :-moz-focusring {
+            outline: auto
+        }
+
+        :-moz-ui-invalid {
+            box-shadow: none
+        }
+
+        progress {
+            vertical-align: baseline
+        }
+
+        ::-webkit-inner-spin-button,
+        ::-webkit-outer-spin-button {
+            height: auto
+        }
+
+        [type=search] {
+            -webkit-appearance: textfield;
+            outline-offset: -2px
+        }
+
+        ::-webkit-search-decoration {
+            -webkit-appearance: none
+        }
+
+        ::-webkit-file-upload-button {
+            -webkit-appearance: button;
+            font: inherit
+        }
+
+        summary {
+            display: list-item
+        }
+
+        blockquote,
+        dd,
+        dl,
+        figure,
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6,
+        hr,
+        p,
+        pre {
+            margin: 0
+        }
+
+        fieldset {
+            margin: 0;
+            padding: 0
+        }
+
+        legend {
+            padding: 0
+        }
+
+        menu,
+        ol,
+        ul {
+            list-style: none;
+            margin: 0;
+            padding: 0
+        }
+
+        dialog {
+            padding: 0
+        }
+
+        textarea {
+            resize: vertical
+        }
+
+        input::placeholder,
+        textarea::placeholder {
+            opacity: 1;
+            color: #9ca3af
+        }
+
+        [role=button],
+        button {
+            cursor: pointer
+        }
+
+        :disabled {
+            cursor: default
+        }
+
+        audio,
+        canvas,
+        embed,
+        iframe,
+        img,
+        object,
+        svg,
+        video {
+            display: block;
+            vertical-align: middle;
+        }
+
+        img,
+        video {
+            max-width: 100%;
+            height: auto
+        }
+
+        [hidden]:where(:not([hidden=until-found])) {
+            display: none
+        }
+
+        .container {
+            width: 100%
+        }
+
+        @media (min-width: 640px) {
+            .container {
+                max-width: 640px
+            }
+        }
+
+        @media (min-width: 768px) {
+            .container {
+                max-width: 768px
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .container {
+                max-width: 1024px
+            }
+        }
+
+        @media (min-width: 1280px) {
+            .container {
+                max-width: 1280px
+            }
+        }
+
+        @media (min-width: 1536px) {
+            .container {
+                max-width: 1536px
+            }
+        }
+
+        .mx-auto {
+            margin-left: auto;
+            margin-right: auto
+        }
+
+        .mb-1 {
+            margin-bottom: 0.25rem
+        }
+
+        .mb-2 {
+            margin-bottom: 0.5rem
+        }
+
+        .mb-3 {
+            margin-bottom: 0.75rem
+        }
+
+        .mb-4 {
+            margin-bottom: 1rem
+        }
+
+        .mb-6 {
+            margin-bottom: 1.5rem
+        }
+
+        .mb-8 {
+            margin-bottom: 2rem
+        }
+
+        .mr-2 {
+            margin-right: 0.5rem
+        }
+
+        .mt-1 {
+            margin-top: 0.25rem
+        }
+
+        .mt-2 {
+            margin-top: 0.5rem
+        }
+
+        .mt-6 {
+            margin-top: 1.5rem
+        }
+
+        .block {
+            display: block
+        }
+
+        .flex {
+            display: flex
+        }
+
+        .grid {
+            display: grid
+        }
+
+        .h-4 {
+            height: 1rem
+        }
+
+        .w-full {
+            width: 100%
+        }
+
+        .max-w-6xl {
+            max-width: 72rem
+        }
+
+        .list-disc {
+            list-style-type: disc
+        }
+
+        .grid-cols-1 {
+            grid-template-columns: repeat(1, minmax(0, 1fr))
+        }
+
+        .items-center {
+            align-items: center
+        }
+
+        .justify-between {
+            justify-content: space-between
+        }
+
+        .gap-4 {
+            gap: 1rem
+        }
+
+        .space-x-4> :not([hidden])~ :not([hidden]) {
+            --tw-space-x-reverse: 0;
+            margin-right: calc(1rem * var(--tw-space-x-reverse));
+            margin-left: calc(1rem * calc(1 - var(--tw-space-x-reverse)))
+        }
+
+        .space-y-1> :not([hidden])~ :not([hidden]) {
+            --tw-space-y-reverse: 0;
+            margin-top: calc(0.25rem * calc(1 - var(--tw-space-y-reverse)));
+            margin-bottom: calc(0.25rem * var(--tw-space-y-reverse))
+        }
+
+        .space-y-2> :not([hidden])~ :not([hidden]) {
+            --tw-space-y-reverse: 0;
+            margin-top: calc(0.5rem * calc(1 - var(--tw-space-y-reverse)));
+            margin-bottom: calc(0.5rem * var(--tw-space-y-reverse))
+        }
+
+        .space-y-3> :not([hidden])~ :not([hidden]) {
+            --tw-space-y-reverse: 0;
+            margin-top: calc(0.75rem * calc(1 - var(--tw-space-y-reverse)));
+            margin-bottom: calc(0.75rem * var(--tw-space-y-reverse))
+        }
+
+        .space-y-4> :not([hidden])~ :not([hidden]) {
+            --tw-space-y-reverse: 0;
+            margin-top: calc(1rem * calc(1 - var(--tw-space-y-reverse)));
+            margin-bottom: calc(1rem * var(--tw-space-y-reverse))
+        }
+
+        .overflow-hidden {
+            overflow: hidden
+        }
+
+        .rounded-full {
+            border-radius: 9999px
+        }
+
+        .rounded-lg {
+            border-radius: 0.5rem
+        }
+
+        .rounded-md {
+            border-radius: 0.375rem
+        }
+
+        .border {
+            border-width: 1px
+        }
+
+        .border-b {
+            border-bottom-width: 1px
+        }
+
+        .border-b-2 {
+            border-bottom-width: 2px
+        }
+
+        .border-blue-200 {
+            --tw-border-opacity: 1;
+            border-color: rgb(191 219 254 / var(--tw-border-opacity, 1))
+        }
+
+        .border-blue-600 {
+            --tw-border-opacity: 1;
+            border-color: rgb(37 99 235 / var(--tw-border-opacity, 1))
+        }
+
+        .border-gray-200 {
+            --tw-border-opacity: 1;
+            border-color: rgb(229 231 235 / var(--tw-border-opacity, 1))
+        }
+
+        .border-green-200 {
+            --tw-border-opacity: 1;
+            border-color: rgb(187 247 208 / var(--tw-border-opacity, 1))
+        }
+
+        .bg-blue-50 {
+            --tw-bg-opacity: 1;
+            background-color: rgb(239 246 255 / var(--tw-bg-opacity, 1))
+        }
+
+        .bg-blue-500 {
+            --tw-bg-opacity: 1;
+            background-color: rgb(59 130 246 / var(--tw-bg-opacity, 1))
+        }
+
+        .bg-blue-600 {
+            --tw-bg-opacity: 1;
+            background-color: rgb(37 99 235 / var(--tw-bg-opacity, 1))
+        }
+
+        .bg-gray-100 {
+            --tw-bg-opacity: 1;
+            background-color: rgb(243 244 246 / var(--tw-bg-opacity, 1))
+        }
+
+        .bg-gray-200 {
+            --tw-bg-opacity: 1;
+            background-color: rgb(229 231 235 / var(--tw-bg-opacity, 1))
+        }
+
+        .bg-gray-50 {
+            --tw-bg-opacity: 1;
+            background-color: rgb(249 250 251 / var(--tw-bg-opacity, 1))
+        }
+
+        .bg-green-50 {
+            --tw-bg-opacity: 1;
+            background-color: rgb(240 253 244 / var(--tw-bg-opacity, 1))
+        }
+
+        .bg-white {
+            --tw-bg-opacity: 1;
+            background-color: rgb(255 255 255 / var(--tw-bg-opacity, 1))
+        }
+
+        .p-4 {
+            padding: 1rem
+        }
+
+        .p-6 {
+            padding: 1.5rem
+        }
+
+        .px-4 {
+            padding-left: 1rem;
+            padding-right: 1rem
+        }
+
+        .px-6 {
+            padding-left: 1.5rem;
+            padding-right: 1.5rem
+        }
+
+        .py-2 {
+            padding-top: 0.5rem;
+            padding-bottom: 0.5rem
+        }
+
+        .py-3 {
+            padding-top: 0.75rem;
+            padding-bottom: 0.75rem
+        }
+
+        .py-8 {
+            padding-top: 2rem;
+            padding-bottom: 2rem
+        }
+
+        .pl-4 {
+            padding-left: 1rem
+        }
+
+        .pl-5 {
+            padding-left: 1.25rem
+        }
+
+        .text-right {
+            text-align: right
+        }
+
+        .text-2xl {
+            font-size: 1.5rem;
+            line-height: 2rem
+        }
+
+        .text-3xl {
+            font-size: 1.875rem;
+            line-height: 2.25rem
+        }
+
+        .text-lg {
+            font-size: 1.125rem;
+            line-height: 1.75rem
+        }
+
+        .text-sm {
+            font-size: 0.875rem;
+            line-height: 1.25rem
+        }
+
+        .text-xl {
+            font-size: 1.25rem;
+            line-height: 1.75rem
+        }
+
+        .text-xs {
+            font-size: 0.75rem;
+            line-height: 1rem
+        }
+
+        .font-bold {
+            font-weight: 700
+        }
+
+        .font-medium {
+            font-weight: 500
+        }
+
+        .font-semibold {
+            font-weight: 600
+        }
+
+        .text-blue-100 {
+            --tw-text-opacity: 1;
+            color: rgb(219 234 254 / var(--tw-text-opacity, 1))
+        }
+
+        .text-blue-200 {
+            --tw-text-opacity: 1;
+            color: rgb(191 219 254 / var(--tw-text-opacity, 1))
+        }
+
+        .text-blue-500 {
+            --tw-text-opacity: 1;
+            color: rgb(59 130 246 / var(--tw-text-opacity, 1))
+        }
+
+        .text-blue-600 {
+            --tw-text-opacity: 1;
+            color: rgb(37 99 235 / var(--tw-text-opacity, 1))
+        }
+
+        .text-blue-800 {
+            --tw-text-opacity: 1;
+            color: rgb(30 64 175 / var(--tw-text-opacity, 1))
+        }
+
+        .text-gray-500 {
+            --tw-text-opacity: 1;
+            color: rgb(107 114 128 / var(--tw-text-opacity, 1))
+        }
+
+        .text-gray-600 {
+            --tw-text-opacity: 1;
+            color: rgb(75 85 99 / var(--tw-text-opacity, 1))
+        }
+
+        .text-gray-700 {
+            --tw-text-opacity: 1;
+            color: rgb(55 65 81 / var(--tw-text-opacity, 1))
+        }
+
+        .text-green-600 {
+            --tw-text-opacity: 1;
+            color: rgb(22 163 74 / var(--tw-text-opacity, 1))
+        }
+
+        .text-green-800 {
+            --tw-text-opacity: 1;
+            color: rgb(22 101 52 / var(--tw-text-opacity, 1))
+        }
+
+        .text-red-500 {
+            --tw-text-opacity: 1;
+            color: rgb(239 68 68 / var(--tw-text-opacity, 1))
+        }
+
+        .text-red-600 {
+            --tw-text-opacity: 1;
+            color: rgb(220 38 38 / var(--tw-text-opacity, 1))
+        }
+
+        .text-white {
+            --tw-text-opacity: 1;
+            color: rgb(255 255 255 / var(--tw-text-opacity, 1))
+        }
+
+        .text-yellow-500 {
+            --tw-text-opacity: 1;
+            color: rgb(234 179 8 / var(--tw-text-opacity, 1))
+        }
+
+        .text-yellow-600 {
+            --tw-text-opacity: 1;
+            color: rgb(202 138 4 / var(--tw-text-opacity, 1))
+        }
+
+        .shadow {
+            --tw-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+            --tw-shadow-colored: 0 1px 3px 0 var(--tw-shadow-color), 0 1px 2px -1px var(--tw-shadow-color);
+            box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)
+        }
+
+        .shadow-lg {
+            --tw-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+            --tw-shadow-colored: 0 10px 15px -3px var(--tw-shadow-color), 0 4px 6px -4px var(--tw-shadow-color);
+            box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)
+        }
+
+        .shadow-md {
+            --tw-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            --tw-shadow-colored: 0 4px 6px -1px var(--tw-shadow-color), 0 2px 4px -2px var(--tw-shadow-color);
+            box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)
+        }
+
+        .transition {
+            transition-property: color, background-color, border-color, fill, stroke, opacity, box-shadow, transform, filter, -webkit-text-decoration-color, -webkit-backdrop-filter;
+            transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;
+            transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter, -webkit-text-decoration-color, -webkit-backdrop-filter;
+            transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+            transition-duration: 150ms
+        }
+
+        .hover\:bg-blue-700:hover {
+            --tw-bg-opacity: 1;
+            background-color: rgb(29 78 216 / var(--tw-bg-opacity, 1))
+        }
+
+        .hover\:text-blue-600:hover {
+            --tw-text-opacity: 1;
+            color: rgb(37 99 235 / var(--tw-text-opacity, 1))
+        }
+
+        @media (min-width: 768px) {
+            .md\:grid-cols-2 {
+                grid-template-columns: repeat(2, minmax(0, 1fr))
+            }
+
+            .md\:grid-cols-4 {
+                grid-template-columns: repeat(4, minmax(0, 1fr))
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container mx-auto px-4 py-8 max-w-6xl">
+        <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+            <!-- Header -->
+            <div class="bg-blue-600 text-white p-6">
+                <div class="flex justify-between items-center">
+                    <div>
+                        <h1 class="text-3xl font-bold">NC Math 2 Dashboard</h1>
+                        <p class="text-blue-100">Student: Miguel De Jesus Collado</p>
+                    </div>
+                    <div class="text-right">
+                        <p class="text-xl font-semibold">Current Grade: 54%</p>
+                        <p class="text-sm text-blue-200">Term T6 (04/04/2025 - 05/23/2025)</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tabs -->
+            <div class="bg-gray-100 px-6 py-3 border-b">
+                <div class="flex space-x-4">
+                    <button id="tab-grades"
+                        class="px-4 py-2 font-medium text-blue-600 border-b-2 border-blue-600">Grades</button>
+                    <button id="tab-plan" class="px-4 py-2 font-medium text-gray-600 hover:text-blue-600">Study
+                        Plan</button>
+                    <button id="tab-calculator" class="px-4 py-2 font-medium text-gray-600 hover:text-blue-600">Grade
+                        Calculator</button>
+                </div>
+            </div>
+
+            <!-- Grades Tab Content -->
+            <div id="content-grades" class="tab-content active p-6">
+                <div class="mb-8">
+                    <h2 class="text-xl font-semibold mb-4">Grade Summary</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                        <div class="bg-white p-4 rounded-lg shadow border border-gray-200">
+                            <p class="text-sm text-gray-500">Current Grade</p>
+                            <p class="text-2xl font-bold text-yellow-500">54%</p>
+                            <p class="text-xs text-gray-500">In-progress</p>
+                        </div>
+                        <div class="bg-white p-4 rounded-lg shadow border border-gray-200">
+                            <p class="text-sm text-gray-500">Independent Practice (30%)</p>
+                            <p class="text-2xl font-bold text-blue-500">58.1%</p>
+                            <p class="text-xs text-gray-500">9 assignments</p>
+                        </div>
+                        <div class="bg-white p-4 rounded-lg shadow border border-gray-200">
+                            <p class="text-sm text-gray-500">Learning Activity (30%)</p>
+                            <p class="text-2xl font-bold text-blue-500">29%</p>
+                            <p class="text-xs text-gray-500">3 assignments</p>
+                        </div>
+                        <div class="bg-white p-4 rounded-lg shadow border border-gray-200">
+                            <p class="text-sm text-gray-500">Missing Assignments</p>
+                            <p class="text-2xl font-bold text-red-500">4</p>
+                            <p class="text-xs text-gray-500">Opportunity to improve</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-8">
+                    <h2 class="text-xl font-semibold mb-4">Independent Practice (Weight: 30%)</h2>
+                    <div class="space-y-3">
+                        <div class="good-grade p-4 rounded-lg">
+                            <div class="flex justify-between items-center">
+                                <div>
+                                    <h3 class="font-medium">Mathia W1</h3>
+                                    <p class="text-sm text-gray-600">Due: 04/11/2025</p>
+                                </div>
+                                <div class="text-right">
+                                    <p class="font-bold text-green-600">99%</p>
+                                    <p class="text-sm text-gray-600">99/100</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bad-grade p-4 rounded-lg">
+                            <div class="flex justify-between items-center">
+                                <div>
+                                    <h3 class="font-medium">Delta Math: Multiplying Radicals</h3>
+                                    <p class="text-sm text-gray-600">Due: 04/09/2025</p>
+                                </div>
+                                <div class="text-right">
+                                    <p class="font-bold text-red-600">0%</p>
+                                    <p class="text-sm text-gray-600">0/100</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bad-grade p-4 rounded-lg">
+                            <div class="flex justify-between items-center">
+                                <div>
+                                    <h3 class="font-medium">Quizizz: Direct Variation</h3>
+                                    <p class="text-sm text-gray-600">Due: 04/09/2025</p>
+                                </div>
+                                <div class="text-right">
+                                    <p class="font-bold text-red-600">0%</p>
+                                    <p class="text-sm text-gray-600">0/100</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bad-grade p-4 rounded-lg">
+                            <div class="flex justify-between items-center">
+                                <div>
+                                    <h3 class="font-medium">Quizizz: Inverse Variation</h3>
+                                    <p class="text-sm text-gray-600">Due: 04/09/2025</p>
+                                </div>
+                                <div class="text-right">
+                                    <p class="font-bold text-red-600">27%</p>
+                                    <p class="text-sm text-gray-600">27/100</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="good-grade p-4 rounded-lg">
+                            <div class="flex justify-between items-center">
+                                <div>
+                                    <h3 class="font-medium">T6 Angle Relationship</h3>
+                                    <p class="text-sm text-gray-600">Due: 04/09/2025</p>
+                                </div>
+                                <div class="text-right">
+                                    <p class="font-bold text-green-600">95%</p>
+                                    <p class="text-sm text-gray-600">95/100</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="average-grade p-4 rounded-lg">
+                            <div class="flex justify-between items-center">
+                                <div>
+                                    <h3 class="font-medium">CFA #4</h3>
+                                    <p class="text-sm text-gray-600">Due: 04/08/2025</p>
+                                </div>
+                                <div class="text-right">
+                                    <p class="font-bold text-yellow-600">50%</p>
+                                    <p class="text-sm text-gray-600">50/100</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="good-grade p-4 rounded-lg">
+                            <div class="flex justify-between items-center">
+                                <div>
+                                    <h3 class="font-medium">Quizizz: Substitution</h3>
+                                    <p class="text-sm text-gray-600">Due: 04/08/2025</p>
+                                </div>
+                                <div class="text-right">
+                                    <p class="font-bold text-green-600">92%</p>
+                                    <p class="text-sm text-gray-600">92/100</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="good-grade p-4 rounded-lg">
+                            <div class="flex justify-between items-center">
+                                <div>
+                                    <h3 class="font-medium">Quizziz: Elimination</h3>
+                                    <p class="text-sm text-gray-600">Due: 04/08/2025</p>
+                                </div>
+                                <div class="text-right">
+                                    <p class="font-bold text-green-600">85%</p>
+                                    <p class="text-sm text-gray-600">85/100</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="average-grade p-4 rounded-lg">
+                            <div class="flex justify-between items-center">
+                                <div>
+                                    <h3 class="font-medium">Quizizz: System of Equations by Graphing</h3>
+                                    <p class="text-sm text-gray-600">Due: 04/07/2025</p>
+                                </div>
+                                <div class="text-right">
+                                    <p class="font-bold text-yellow-600">75%</p>
+                                    <p class="text-sm text-gray-600">75/100</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-8">
+                    <h2 class="text-xl font-semibold mb-4">Learning Activity (Weight: 30%)</h2>
+                    <div class="space-y-3">
+                        <div class="bad-grade p-4 rounded-lg">
+                            <div class="flex justify-between items-center">
+                                <div>
+                                    <h3 class="font-medium">Isosceles &amp; Equilateral Triangles</h3>
+                                    <p class="text-sm text-gray-600">Due: 04/14/2025</p>
+                                </div>
+                                <div class="text-right">
+                                    <p class="font-bold text-red-600">0%</p>
+                                    <p class="text-sm text-gray-600">0/100</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="good-grade p-4 rounded-lg">
+                            <div class="flex justify-between items-center">
+                                <div>
+                                    <h3 class="font-medium">Homework1: Parallel &amp; Transversal</h3>
+                                    <p class="text-sm text-gray-600">Due: 04/11/2025</p>
+                                </div>
+                                <div class="text-right">
+                                    <p class="font-bold text-green-600">87%</p>
+                                    <p class="text-sm text-gray-600">87/100</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bad-grade p-4 rounded-lg">
+                            <div class="flex justify-between items-center">
+                                <div>
+                                    <h3 class="font-medium">EdPuzzle: Direct and Inverse Variation Word Problems</h3>
+                                    <p class="text-sm text-gray-600">Due: 04/09/2025</p>
+                                </div>
+                                <div class="text-right">
+                                    <p class="font-bold text-red-600">0%</p>
+                                    <p class="text-sm text-gray-600">0/100</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-blue-50 p-6 rounded-lg border border-blue-200">
+                    <h3 class="text-lg font-semibold text-blue-800 mb-2">Grade Analysis</h3>
+                    <p class="mb-4">Miguel has <span class="font-bold text-green-600">4 good grades</span> (80%+), <span
+                            class="font-bold text-yellow-600">2 average grades</span> (50-79%), and <span
+                            class="font-bold text-red-600">6 poor/missing grades</span> (below 50%).</p>
+                    <p>To pass the class, Miguel should focus on completing missing assignments and improving in areas
+                        with low scores, particularly Direct and Inverse Variation topics.</p>
+                </div>
+            </div>
+
+            <!-- Study Plan Tab Content -->
+            <div id="content-plan" class="tab-content p-6">
+                <div class="mb-8">
+                    <h2 class="text-xl font-semibold mb-4">Study Plan to Pass NC Math 2</h2>
+                    <div class="bg-blue-50 p-4 rounded-lg border border-blue-200 mb-6">
+                        <p class="text-blue-800"><strong>Goal:</strong> Raise grade from 54% to at least 70% by the end
+                            of Term T6 (05/23/2025)</p>
+                    </div>
+
+                    <div class="mb-8">
+                        <h3 class="text-lg font-medium mb-3">Week 1: Complete Missing Assignments</h3>
+                        <div class="space-y-2 pl-4">
+                            <div class="checkbox-container">
+                                <input type="checkbox" id="task1" class="task-checkbox">
+                                <label for="task1" class="task-label">Complete "Delta Math: Multiplying Radicals" (Due:
+                                    04/09/2025)</label>
+                            </div>
+                            <div class="checkbox-container">
+                                <input type="checkbox" id="task2" class="task-checkbox">
+                                <label for="task2" class="task-label">Complete "Quizizz: Direct Variation" (Due:
+                                    04/09/2025)</label>
+                            </div>
+                            <div class="checkbox-container">
+                                <input type="checkbox" id="task3" class="task-checkbox">
+                                <label for="task3" class="task-label">Complete "EdPuzzle: Direct and Inverse Variation
+                                    Word Problems" (Due: 04/09/2025)</label>
+                            </div>
+                            <div class="checkbox-container">
+                                <input type="checkbox" id="task4" class="task-checkbox">
+                                <label for="task4" class="task-label">Complete "Isosceles &amp; Equilateral Triangles"
+                                    (Due: 04/14/2025)</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-8">
+                        <h3 class="text-lg font-medium mb-3">Week 2: Focus on Weak Areas</h3>
+                        <div class="space-y-2 pl-4">
+                            <div class="checkbox-container">
+                                <input type="checkbox" id="task5" class="task-checkbox">
+                                <label for="task5" class="task-label">Study Direct and Inverse Variation (2
+                                    hours)</label>
+                            </div>
+                            <div class="checkbox-container">
+                                <input type="checkbox" id="task6" class="task-checkbox">
+                                <label for="task6" class="task-label">Practice System of Equations problems (1
+                                    hour)</label>
+                            </div>
+                            <div class="checkbox-container">
+                                <input type="checkbox" id="task7" class="task-checkbox">
+                                <label for="task7" class="task-label">Review Angle Relationships and Triangles (2
+                                    hours)</label>
+                            </div>
+                            <div class="checkbox-container">
+                                <input type="checkbox" id="task8" class="task-checkbox">
+                                <label for="task8" class="task-label">Meet with teacher for extra help on difficult
+                                    topics</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-8">
+                        <h3 class="text-lg font-medium mb-3">Week 3-4: Stay Current &amp; Prepare for Final</h3>
+                        <div class="space-y-2 pl-4">
+                            <div class="checkbox-container">
+                                <input type="checkbox" id="task9" class="task-checkbox">
+                                <label for="task9" class="task-label">Complete all new assignments on time with 80%+
+                                    scores</label>
+                            </div>
+                            <div class="checkbox-container">
+                                <input type="checkbox" id="task10" class="task-checkbox">
+                                <label for="task10" class="task-label">Create study guides for each topic</label>
+                            </div>
+                            <div class="checkbox-container">
+                                <input type="checkbox" id="task11" class="task-checkbox">
+                                <label for="task11" class="task-label">Form a study group with classmates</label>
+                            </div>
+                            <div class="checkbox-container">
+                                <input type="checkbox" id="task12" class="task-checkbox">
+                                <label for="task12" class="task-label">Ask teacher about extra credit
+                                    opportunities</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-8">
+                        <h3 class="text-lg font-medium mb-3">Week 5-6: Final Exam Preparation</h3>
+                        <div class="space-y-2 pl-4">
+                            <div class="checkbox-container">
+                                <input type="checkbox" id="task13" class="task-checkbox">
+                                <label for="task13" class="task-label">Review all course material (1 hour per
+                                    day)</label>
+                            </div>
+                            <div class="checkbox-container">
+                                <input type="checkbox" id="task14" class="task-checkbox">
+                                <label for="task14" class="task-label">Take practice exams</label>
+                            </div>
+                            <div class="checkbox-container">
+                                <input type="checkbox" id="task15" class="task-checkbox">
+                                <label for="task15" class="task-label">Focus on mastering key concepts: Systems of
+                                    Equations, Variation, and Geometry</label>
+                            </div>
+                            <div class="checkbox-container">
+                                <input type="checkbox" id="task16" class="task-checkbox">
+                                <label for="task16" class="task-label">Attend any review sessions offered by
+                                    teacher</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-green-50 p-4 rounded-lg border border-green-200">
+                        <h3 class="text-lg font-medium text-green-800 mb-2">Daily Habits for Success</h3>
+                        <ul class="list-disc pl-5 space-y-1 text-green-800">
+                            <li>Spend at least 30 minutes on math every day</li>
+                            <li>Ask questions in class when you don't understand</li>
+                            <li>Review notes from each class the same day</li>
+                            <li>Use online resources like Khan Academy for extra practice</li>
+                            <li>Track your progress using this dashboard</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Grade Calculator Tab Content -->
+            <div id="content-calculator" class="tab-content p-6">
+                <div class="mb-8">
+                    <h2 class="text-xl font-semibold mb-4">Grade Calculator</h2>
+                    <p class="mb-4">Use this calculator to see how future assignments will affect your grade.</p>
+
+                    <div class="bg-white p-6 rounded-lg shadow-md border border-gray-200">
+                        <div class="mb-6">
+                            <h3 class="font-medium mb-2">Current Grade Breakdown</h3>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <p class="text-sm text-gray-600 mb-1">Independent Practice (30%)</p>
+                                    <div class="progress-container">
+                                        <div class="progress-bar bg-blue-500" style="width: 58.1%"></div>
+                                    </div>
+                                    <p class="text-right text-sm mt-1">58.1%</p>
+                                </div>
+                                <div>
+                                    <p class="text-sm text-gray-600 mb-1">Learning Activity (30%)</p>
+                                    <div class="progress-container">
+                                        <div class="progress-bar bg-blue-500" style="width: 29%"></div>
+                                    </div>
+                                    <p class="text-right text-sm mt-1">29%</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-6">
+                            <h3 class="font-medium mb-3">Simulate Completing Missing Assignments</h3>
+                            <div class="space-y-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">Delta Math: Multiplying
+                                        Radicals</label>
+                                    <input type="range" min="0" max="100" value="80" class="w-full" id="assignment1">
+                                    <div class="flex justify-between text-xs text-gray-500">
+                                        <span>0%</span>
+                                        <span id="assignment1-value">80%</span>
+                                        <span>100%</span>
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">Quizizz: Direct
+                                        Variation</label>
+                                    <input type="range" min="0" max="100" value="80" class="w-full" id="assignment2">
+                                    <div class="flex justify-between text-xs text-gray-500">
+                                        <span>0%</span>
+                                        <span id="assignment2-value">80%</span>
+                                        <span>100%</span>
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">EdPuzzle: Direct and
+                                        Inverse Variation</label>
+                                    <input type="range" min="0" max="100" value="80" class="w-full" id="assignment3">
+                                    <div class="flex justify-between text-xs text-gray-500">
+                                        <span>0%</span>
+                                        <span id="assignment3-value">80%</span>
+                                        <span>100%</span>
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">Isosceles &amp;
+                                        Equilateral Triangles</label>
+                                    <input type="range" min="0" max="100" value="80" class="w-full" id="assignment4">
+                                    <div class="flex justify-between text-xs text-gray-500">
+                                        <span>0%</span>
+                                        <span id="assignment4-value">80%</span>
+                                        <span>100%</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-6">
+                            <h3 class="font-medium mb-3">Final Exam Estimate</h3>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Expected Final Exam
+                                    Score</label>
+                                <input type="range" min="0" max="100" value="70" class="w-full" id="finalExam">
+                                <div class="flex justify-between text-xs text-gray-500">
+                                    <span>0%</span>
+                                    <span id="finalExam-value">70%</span>
+                                    <span>100%</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <button id="calculate-btn"
+                            class="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition">Calculate
+                            Projected Grade</button>
+
+                        <div class="mt-6 p-4 bg-gray-50 rounded-lg border border-gray-200">
+                            <h3 class="font-medium mb-2">Projected Final Grade</h3>
+                            <div class="flex items-center">
+                                <div class="w-full bg-gray-200 rounded-full h-4 mr-2">
+                                    <div id="projected-bar" class="bg-blue-600 h-4 rounded-full" style="width: 68%">
+                                    </div>
+                                </div>
+                                <span id="projected-grade" class="font-bold">68%</span>
+                            </div>
+                            <p id="grade-message" class="mt-2 text-sm">Complete all missing assignments with good scores
+                                to pass the class!</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Tab switching functionality
+        document.getElementById('tab-grades').addEventListener('click', function () {
+            setActiveTab('grades');
+        });
+
+        document.getElementById('tab-plan').addEventListener('click', function () {
+            setActiveTab('plan');
+        });
+
+        document.getElementById('tab-calculator').addEventListener('click', function () {
+            setActiveTab('calculator');
+        });
+
+        function setActiveTab(tabName) {
+            // Hide all tab contents
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+
+            // Show selected tab content
+            document.getElementById('content-' + tabName).classList.add('active');
+
+            // Update tab button styles
+            document.querySelectorAll('#tab-grades, #tab-plan, #tab-calculator').forEach(tab => {
+                tab.classList.remove('text-blue-600', 'border-b-2', 'border-blue-600');
+                tab.classList.add('text-gray-600');
+            });
+
+            document.getElementById('tab-' + tabName).classList.remove('text-gray-600');
+            document.getElementById('tab-' + tabName).classList.add('text-blue-600', 'border-b-2', 'border-blue-600');
+        }
+
+        // Task checkbox functionality
+        document.querySelectorAll('.task-checkbox').forEach(checkbox => {
+            checkbox.addEventListener('change', function () {
+                const label = this.nextElementSibling;
+                if (this.checked) {
+                    label.classList.add('completed');
+                } else {
+                    label.classList.remove('completed');
+                }
+            });
+        });
+
+        // Grade calculator functionality
+        const sliders = ['assignment1', 'assignment2', 'assignment3', 'assignment4', 'finalExam'];
+
+        sliders.forEach(id => {
+            const slider = document.getElementById(id);
+            const valueDisplay = document.getElementById(id + '-value');
+
+            slider.addEventListener('input', function () {
+                valueDisplay.textContent = this.value + '%';
+                calculateProjectedGrade();
+            });
+        });
+
+        document.getElementById('calculate-btn').addEventListener('click', calculateProjectedGrade);
+
+        function calculateProjectedGrade() {
+            // Current grades
+            const currentIndependentPractice = 58.1;
+            const currentLearningActivity = 29;
+
+            // Get values from sliders
+            const assignment1 = parseInt(document.getElementById('assignment1').value);
+            const assignment2 = parseInt(document.getElementById('assignment2').value);
+            const assignment3 = parseInt(document.getElementById('assignment3').value);
+            const assignment4 = parseInt(document.getElementById('assignment4').value);
+            const finalExam = parseInt(document.getElementById('finalExam').value);
+
+            // Calculate new independent practice grade (assuming equal weight for all assignments)
+            // Current: 9 assignments, adding 2 more
+            const newIndependentPractice = (currentIndependentPractice * 9 + assignment1 + assignment2) / 11;
+
+            // Calculate new learning activity grade
+            // Current: 3 assignments, adding 2 more
+            const newLearningActivity = (currentLearningActivity * 3 + assignment3 + assignment4) / 5;
+
+            // Calculate projected final grade (assuming 30% independent, 30% learning, 40% final exam)
+            const projectedGrade = (newIndependentPractice * 0.3) + (newLearningActivity * 0.3) + (finalExam * 0.4);
+
+            // Update UI
+            const roundedGrade = Math.round(projectedGrade);
+            document.getElementById('projected-grade').textContent = roundedGrade + '%';
+            document.getElementById('projected-bar').style.width = roundedGrade + '%';
+
+            // Update message
+            let message = '';
+            if (roundedGrade >= 70) {
+                message = 'Great job! You\'re on track to pass the class!';
+                document.getElementById('projected-bar').classList.remove('bg-red-600', 'bg-yellow-500');
+                document.getElementById('projected-bar').classList.add('bg-green-600');
+            } else if (roundedGrade >= 60) {
+                message = 'You\'re getting closer! Keep working on those assignments.';
+                document.getElementById('projected-bar').classList.remove('bg-red-600', 'bg-green-600');
+                document.getElementById('projected-bar').classList.add('bg-yellow-500');
+            } else {
+                message = 'You\'ll need to work harder to pass.Focus on completing all assignments.';
+                document.getElementById('projected-bar').classList.remove('bg-green-600', 'bg-yellow-500');
+                document.getElementById('projected-bar').classList.add('bg-red-600');
+            }
+
+            document.getElementById('grade-message').textContent = message;
+        }
+
+        // Initialize calculator
+        calculateProjectedGrade();
+    </script>
+
+</body>
+
+</html>
